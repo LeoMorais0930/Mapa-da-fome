@@ -10,4 +10,4 @@ def adicionar_dados(db: Session):
 
     db.add_all(dados_exemplo)
     db.commit()
-    print("✅ Dados de teste inseridos com sucesso!")
+    print("Dados de teste inseridos com sucesso!")
