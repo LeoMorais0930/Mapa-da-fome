@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Interativo - Desertos Alimentares</title>
+    
+    <!-- Importar Leaflet.js -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Mapa de Desertos Alimentares</h1>
+    <div id="map"></div>
+
+    <script>
+        var map = L.map('map').setView([-23.533773, -46.625290], 12);
+
+        // Adicionar camada de mapa (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Buscar dados do FastAPI
+        fetch("http://127.0.0.1:8000/mapa/")
+            .then(response => response.json())
+            .then(data => {
+                data.desertos.forEach(local => {
+                    console.log("Adicionando:", local); // Debug no console
+
+                    L.marker([local.latitude, local.longitude])
+                        .addTo(map)
+                        .bindPopup(`<b>${local.bairro}, ${local.cidade}</b><br>${local.acesso_alimentos}`);
+                });
+            })
+            .catch(error => console.error("Erro ao buscar dados:", error));
+    </script>
+
+</body>
+</html>
